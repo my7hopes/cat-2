@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🐾 오늘의 냥냥 운세</title>
+<style>
+  body {
+    font-family: "Apple SD Gothic Neo", "맑은 고딕", sans-serif;
+    margin:0; display:flex; min-height:100vh;
+    align-items:center; justify-content:center;
+    background: linear-gradient(135deg,#ffe6f0,#fffaf2);
+  }
+  .card {
+    width:min(520px,92vw);
+    background:#fff;
+    border-radius:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    padding:32px;
+    text-align:center;
+    animation: floaty 3s ease-in-out infinite;
+  }
+  @keyframes floaty {
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-6px)}
+  }
+  h1 {
+    margin:0 0 20px;
+    font-size:26px;
+  }
+  .fortune {
+    font-size:20px; line-height:1.6; margin:20px 0;
+    padding:20px; border-radius:16px;
+    background:#fff0f5; color:#333;
+  }
+  .hint {
+    color:#999; font-size:14px; margin-top:16px;
+  }
+  button {
+    border:0; padding:12px 20px; border-radius:20px;
+    cursor:pointer; font-size:16px; font-weight:bold;
+    transition:.2s; background:#ffb6c1; color:#fff;
+  }
+  button:hover { background:#ff95a6 }
+  .actions { display:flex; gap:12px; justify-content:center; margin-top:12px }
+</style>
+<body>
+  <div class="card">
+    <h1>🐱 오늘의 냥냥 운세 🐾</h1>
+    <div id="fortune" class="fortune">로딩 중...</div>
+    <div class="actions">
+      <button id="reroll">😺 다시 뽑기</button>
+      <button id="share">💌 공유하기</button>
+    </div>
+    <div class="hint">Tip: 내일 또 찍으면 새로운 운세가 나타나요!</div>
+  </div>
+
+<script>
+const MESSAGES=[
+  "🐾 오늘은 낮잠이 최고의 보약! 잠깐 눈을 붙이면 행운이 와요.",
+  "😺 고양이처럼 호기심을 가져보세요. 새로운 아이디어가 떠올라요!",
+  "🍀 작은 친절이 부메랑처럼 돌아올 하루.",
+  "🐱 간식 같은 행복이 찾아올 예정!",
+  "🌸 귀여운 고양이처럼 매력 폭발! 누군가가 당신을 다시 보게 돼요.",
+  "☕ 오늘은 달콤한 음료가 행운을 불러와요.",
+  "📚 계획을 세우고 차근차근 하면 놀라운 성과!",
+  "🐾 길고양이가 반갑게 인사하는 꿈같은 소식이 올지도?",
+  "🌈 무지개 같은 행운이 살짝 비칠 거예요.",
+  "💌 오랫동안 기다린 연락이 찾아올 운세!",
+  "🐾 창문을 열고 바람을 맞아보세요. 고민이 날아가요.",
+  "🍰 달콤한 간식이 당신의 에너지를 채워줘요.",
+  "🐱 애교 한 스푼, 유머 한 스푼—오늘은 대화가 즐겁게 풀려요.",
+  "🌙 오늘 밤 달님이 특별한 소원을 들어줄지도!",
+  "😸 자신감 넘치게 행동하면 기회가 쏟아집니다!"
+];
+
+function seededRandom(seed){let x=seed;x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)/4294967296}
+function pickDaily(pool){
+  const t=new Date();
+  const s=Number(`${t.getFullYear()}${t.getMonth()+1}${t.getDate()}`);
+  return pool[Math.floor(seededRandom(s)*pool.length)];
+}
+function show(daily=true){
+  const msg=daily?pickDaily(MESSAGES):MESSAGES[Math.floor(Math.random()*MESSAGES.length)];
+  document.getElementById("fortune").textContent=msg;
+}
+show(true);
+document.getElementById("reroll").onclick=()=>show(false);
+document.getElementById("share").onclick=async()=>{
+  const text="🐱 오늘의 냥냥 운세\n"+document.getElementById("fortune").textContent;
+  try{await navigator.share?.({text})||navigator.clipboard.writeText(text);
+    alert("공유/복사 완료!")}catch{}
+};
+</script>
+</body>
+</html>
